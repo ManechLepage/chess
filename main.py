@@ -20,7 +20,11 @@ class MyGame(arcade.Window):
         self.create_grid()
         self.create_pieces()
 
-        self.generate_from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+        self.fen_file = open("fens.txt", "r+")
+        starting_fen = self.fen_file.readline()
+        self.fen_file.close()
+        self.generate_from_fen(starting_fen)
+        print(self.save_position())
 
     def create_grid(self):
         self.squareList = arcade.SpriteList()
@@ -53,15 +57,16 @@ class MyGame(arcade.Window):
 
     def generate_from_fen(self, fen):
         row_list = fen.split("/")
-        print(row_list)
+        #print(row_list)
+        self.pieceList = []
         for i in range(len(row_list)):
             val = [*row_list[i]]
-            print(val)
+            #print(val)
             square_column = 0
             for j in range(len(val)):
                 try:
                     int(val[j])
-                    print(val[j])
+                    #print(val[j])
                     square_column += val[j]
                 except:
                     isPiece = True
@@ -93,8 +98,56 @@ class MyGame(arcade.Window):
                         piece.width = ((WIDTH - WIDTH_MARGIN * 2) / 8) - PIECE_MARGIN
                         piece.height = ((HEIGHT - HEIGHT_MARGIN * 2) / 8) - PIECE_MARGIN
                         self.grid[piece.x][piece.y].is_occupied = True
+                        self.pieceList.append(piece)
                         square_column += 1
 
+    def save_position(self):
+        #TODO: Horizontal and not vertical FEN
+        fen = []
+        for x in self.grid:
+            fen_row = []
+            for y in x:
+                space_counter = 0
+                if not y.is_occupied:
+                    space_counter += 1
+                else:
+                    if space_counter > 0:
+                        fen_row.append(str(space_counter))
+                    for piece in self.pieceList:
+                        if (piece.x, piece.y) == (y.x, y.y):
+                            i = piece
+                    if i.__class__.__name__ == "Rook":
+                        if y.is_dark:
+                            fen_row.append("r")
+                        else:
+                            fen_row.append("R")
+                    elif i.__class__.__name__ == "Pawn":
+                        if i.is_dark:
+                            fen_row.append("p")
+                        else:
+                            fen_row.append("P")
+                    elif i.__class__.__name__ == "Knight":
+                        if i.is_dark:
+                            fen_row.append("n")
+                        else:
+                            fen_row.append("N")
+                    elif i.__class__.__name__ == "Bishop":
+                        if i.is_dark:
+                            fen_row.append("b")
+                        else:
+                            fen_row.append("B")
+                    elif i.__class__.__name__ == "King":
+                        if i.is_dark:
+                            fen_row.append("k")
+                        else:
+                            fen_row.append("K")
+                    elif i.__class__.__name__ == "Queen":
+                        if i.is_dark:
+                            fen_row.append("q")
+                        else:
+                            fen_row.append("Q")
+            fen.append(fen_row)
+        return fen
 
 
     def on_draw(self):

@@ -1,6 +1,17 @@
-- [ ] Add numbers
+- [ ] Add numbers and letters on the board
+---
 - [ ] Generate a position with fen
-  - [ ] Piece position
+  - [x] ~~Piece position~~
   - [ ] Castling
   - [ ] Number of moves
+---
 - [ ] Save position in file as fen
+  - [x] Create file with fens
+  - [ ] Function for save new position
+---
+- [ ] Movements
+  - [ ] Take a piece and move it anywhere
+  - [ ] Function takes list of square and return possible moves
+  - [ ] Rook
+  - [ ] Bishop
+  - [ ] Queen
