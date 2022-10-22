@@ -1,0 +1,6 @@
+- [ ] Add numbers
+- [ ] Generate a position with fen
+  - [ ] Piece position
+  - [ ] Castling
+  - [ ] Number of moves
+- [ ] Save position in file as fen
